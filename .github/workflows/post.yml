@@ -1,0 +1,107 @@
+# This is a workflow that is reused in the post repositories to build each post
+# and it doesn't actually get run on this repo.
+name: Build post
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        type: string
+        default: "3.10"
+
+jobs:
+  pre-commit:
+    name: Run pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Cache pre-commit environments
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pre-commit-
+      - name: Install pre-commit
+        run: python -m pip install -U pre-commit
+      - name: Run pre-commit
+        run: pre-commit run --all-files
+
+  dependencies:
+    name: Freeze dependencies
+    concurrency: deps-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Write runtime file
+        run: echo "python-${{ inputs.python-version }}" > ./runtime.txt
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/requirements.in') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+      - name: Install pip-tools
+        run: |
+          python -m pip install -U pip
+          python -m pip install -U pip-tools
+      - name: Freeze dependencies
+        run: pip-compile
+      - name: Push changes to main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: main
+          folder: "."
+
+  execute:
+    name: Execute the post
+    concurrency: exec-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install pip-tools
+        run: |
+          python -m pip install -U pip
+          python -m pip install -U pip-tools
+      - name: Install correct dependencies
+        run: pip-sync
+      - name: Execute the post using nbconvert
+        run: jupyter nbconvert --to notebook --output=post.ipynb --execute post.ipynb
+      - name: Upload the executed notebook as an artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: executed
+          path: post.ipynb
+      - name: Push executed notebook to 'executed' branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: executed
+          folder: "."
+          single-commit: true
+          clean: true

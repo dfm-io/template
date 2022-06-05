@@ -1,0 +1,12 @@
+
+name: Build post
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    uses: dfm-io/workflow/.github/workflows/post.yml@main

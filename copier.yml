@@ -21,10 +21,6 @@ slug:
   default: "{{title|lower|replace(' ', '-')}}"
   help: URL slug for the post
 
-summary:
-  type: str
-  help: A short summary of the post
-
 python_version:
   type: str
   default: "3.9"

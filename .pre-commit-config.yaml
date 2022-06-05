@@ -12,7 +12,3 @@ repos:
     rev: "0.5.0"
     hooks:
       - id: nbstripout
-  - repo: https://github.com/jazzband/pip-tools
-    rev: "6.6.2"
-    hooks:
-      - id: pip-compile

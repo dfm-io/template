@@ -1,4 +1,8 @@
 _subdirectory: template
+_skip_if_exists:
+  - post.ipynb
+  - requirements.txt
+  - requirements.in
 
 year:
   type: int

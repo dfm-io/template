@@ -1,5 +1,0 @@
-title: "emcee + PyMC3"
-date: 2018-08-21
-Slug: emcee-pymc3
-summary: "sampling models defined in PyMC3 using emcee"
-math: true

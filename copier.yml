@@ -1,1 +1,31 @@
 _subdirectory: template
+
+year:
+  type: int
+  help: The year of publication (e.g. 2022)
+
+month:
+  type: int
+  help: The month of publication (e.g. 06)
+
+day:
+  type: int
+  help: The day of publication (e.g. 01)
+
+title:
+  type: str
+  help: Title of the post
+
+slug:
+  type: str
+  default: "{{title|lower|replace(' ', '-')}}"
+  help: URL slug for the post
+
+summary:
+  type: str
+  help: A short summary of the post
+
+python_version:
+  type: str
+  default: "3.9"
+  help: The Python version to use

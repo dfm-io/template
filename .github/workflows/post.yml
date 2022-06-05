@@ -71,7 +71,7 @@ jobs:
           folder: "."
 
   execute:
-    needs: dependencies
+    needs: [dependencies, pre-commit]
     name: Execute the post
     concurrency: exec-${{ github.ref }}
     runs-on: ubuntu-latest

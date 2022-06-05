@@ -1,5 +1,6 @@
+notebook
+ipykernel
+nbconvert
 numpy
 scipy
 matplotlib
-ipykernel
-nbconvert

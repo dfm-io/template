@@ -28,7 +28,7 @@ pre-commit install
 To set up your environment, in the root directory of the post repo, run:
 
 ```bash
-python -m venv env
+python -m venv --system-site-packages env
 source env/bin/activate
 python -m pip install -U pip
 python -m pip install -U pip-tools

@@ -10,18 +10,13 @@ To create a new post, install [copier](https://copier.readthedocs.io) then run:
 copier gh:dfm-io/template post--URL_SLUG_FOR_POST
 cd post--URL_SLUG_FOR_POST
 git init .
+python -m pip install pre-commit
+pre-commit install
 git add .
 git commit -am "Initial commit"
 ```
 
 Where `URL_SLUG_FOR_POST` is (gasp!) the URL slug for this post. Then the tradition is for this to be committed to a repo called `post--URL_SLUG_FOR_POST` under the `dfm-io` organization.
-
-**Don't forget to install and use pre-commit:**
-
-```bash
-python -m pip install pre-commit
-pre-commit install
-```
 
 ## Setting up Python environment
 

@@ -11,4 +11,4 @@ jobs:
   build:
     uses: dfm-io/workflow/.github/workflows/post.yml@main
     with:
-      python-version: "3.10"
+      python-version: "3.9"

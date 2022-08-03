@@ -23,7 +23,7 @@ Where `URL_SLUG_FOR_POST` is (gasp!) the URL slug for this post. Then the tradit
 To set up your environment, in the root directory of the post repo, run:
 
 ```bash
-python -m venv --system-site-packages env
+python -m venv env
 source env/bin/activate
 python -m pip install -U pip
 python -m pip install -U pip-tools
